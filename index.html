@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentarii Waze România</title>
+    <meta name="description"
+          content="Vezi comentarii și înjurături de pe Waze România. Amuză-te în orice moment al zilei.">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Vezi comentarii de pe Waze din orașul:</h1>
+    <select id="city-selector" class="p-2 border border-gray-300 rounded">
+        <option value="46.0664,23.5800">Alba Iulia</option>
+        <option value="46.1866,21.3123">Arad</option>
+        <option value="44.8600,24.8678">Pitești</option>
+        <option value="46.5700,26.9200">Bacău</option>
+        <option value="47.0465,21.9189">Oradea</option>
+        <option value="47.1332,24.5000">Bistrița</option>
+        <option value="47.7479,26.6693">Botoșani</option>
+        <option value="45.6580,25.6012">Brașov</option>
+        <option value="45.2692,27.9575">Brăila</option>
+        <option selected value="44.4268,26.1025">București</option>
+        <option value="45.1481,26.8231">Buzău</option>
+        <option value="45.3000,22.8833">Reșița</option>
+        <option value="44.2000,27.3333">Călărași</option>
+        <option value="46.7712,23.6236">Cluj-Napoca</option>
+        <option value="44.1733,28.6383">Constanța</option>
+        <option value="45.8608,25.7886">Sfântu Gheorghe</option>
+        <option value="44.9333,25.4500">Târgoviște</option>
+        <option value="44.3302,23.7949">Craiova</option>
+        <option value="45.4263,28.0367">Galați</option>
+        <option value="43.9037,25.9699">Giurgiu</option>
+        <option value="45.0382,23.2740">Târgu Jiu</option>
+        <option value="46.3600,25.7900">Miercurea Ciuc</option>
+        <option value="45.8833,22.9167">Deva</option>
+        <option value="44.5638,27.3619">Slobozia</option>
+        <option value="47.1585,27.6014">Iași</option>
+        <option value="44.5032,26.1021">Ilfov</option>
+        <option value="47.6584,23.5795">Baia Mare</option>
+        <option value="44.6319,22.6561">Drobeta-Turnu Severin</option>
+        <option value="46.5456,24.5625">Târgu Mureș</option>
+        <option value="46.9317,26.3708">Piatra Neamț</option>
+        <option value="44.4258,24.3714">Slatina</option>
+        <option value="44.9404,26.0230">Ploiești</option>
+        <option value="47.7936,22.8850">Satu Mare</option>
+        <option value="47.1756,23.0635">Zalău</option>
+        <option value="45.7983,24.1256">Sibiu</option>
+        <option value="47.6514,26.2555">Suceava</option>
+        <option value="43.9757,25.3334">Alexandria</option>
+        <option value="45.7489,21.2087">Timișoara</option>
+        <option value="45.1796,28.8064">Tulcea</option>
+        <option value="46.6407,27.7276">Vaslui</option>
+        <option value="45.0997,24.3693">Râmnicu Vâlcea</option>
+        <option value="45.6960,27.1867">Focșani</option>
+    </select>
+    <button id="load-comments" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Încarcă comentariile
+    </button>
+    <div class="my-4">
+        <label class="block mb-4 text-sm font-bold text-gray-700">Configurare offset-uri (implicit 0.05):</label>
+        <p class="text-sm mb-2">Offset-urile sunt folosite pentru a ajusta aria de căutare în jurul coordonatelor
+            selectate.</p>
+        <div class="flex flex-wrap -mx-2">
+            <div class="flex flex-col px-2 mb-4 w-full md:w-1/2 lg:w-1/4">
+                <label for="offset-top" class="mb-1">Offset sus:</label>
+                <input type="number" id="offset-top" class="p-2 border border-gray-300 rounded" value="0.05">
+            </div>
+            <div class="flex flex-col px-2 mb-4 w-full md:w-1/2 lg:w-1/4">
+                <label for="offset-bottom" class="mb-1">Offset jos:</label>
+                <input type="number" id="offset-bottom" class="p-2 border border-gray-300 rounded" value="0.05">
+            </div>
+            <div class="flex flex-col px-2 mb-4 w-full md:w-1/2 lg:w-1/4">
+                <label for="offset-left" class="mb-1">Offset stânga:</label>
+                <input type="number" id="offset-left" class="p-2 border border-gray-300 rounded" value="0.05">
+            </div>
+            <div class="flex flex-col px-2 mb-4 w-full md:w-1/2 lg:w-1/4">
+                <label for="offset-right" class="mb-1">Offset dreapta:</label>
+                <input type="number" id="offset-right" class="p-2 border border-gray-300 rounded" value="0.05">
+            </div>
+        </div>
+    </div>
+
+
+    <div id="comments-container" class="mt-6">
+    </div>
+</div>
+
+<footer class="mt-8 text-center">
+    <a href="https://github.com/s1lviu/ComentariiWaze" target="_blank" class="text-blue-500 hover:text-blue-700">
+        fă-l mai bun
+    </a>
+</footer>
+<script>
+    document.getElementById('load-comments').addEventListener('click', function () {
+        const selectedValue = document.getElementById('city-selector').value;
+        const [lat, lon] = selectedValue.split(',');
+        const cityName = document.getElementById('city-selector').options[document.getElementById('city-selector').selectedIndex].text;
+
+        // Get the offset values from the input fields
+        const offsetTop = parseFloat(document.getElementById('offset-top').value);
+        const offsetBottom = parseFloat(document.getElementById('offset-bottom').value);
+        const offsetLeft = parseFloat(document.getElementById('offset-left').value);
+        const offsetRight = parseFloat(document.getElementById('offset-right').value);
+
+        const proxyUrl = 'https://waze-chat.silviu.workers.dev/?';
+        const wazeApiParams = `top=${parseFloat(lat) + offsetTop}&bottom=${parseFloat(lat) - offsetBottom}&left=${parseFloat(lon) - offsetLeft}&right=${parseFloat(lon) + offsetRight}&env=row&types=alerts`;
+
+        fetch(proxyUrl + wazeApiParams)
+            .then(response => response.json())
+            .then(data => {
+                displayComments(data.alerts, cityName);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    });
+
+    function displayComments(alerts, cityName) {
+        const container = document.getElementById('comments-container');
+        container.innerHTML = ''; // Clear previous comments
+
+        let hasComments = false;
+
+        alerts.filter(alert => alert.type === 'CHIT_CHAT').forEach(alert => {
+            const comments = alert.comments || [];
+            const filteredComments = comments.filter(comment => comment.text && comment.text.trim() !== '');
+
+            if (filteredComments.length > 0) {
+                hasComments = true;
+                const reportElement = document.createElement('div');
+                reportElement.classList.add('p-4', 'bg-white', 'rounded', 'shadow', 'mb-4');
+
+                reportElement.innerHTML = `
+                    <h3 class="font-semibold text-lg">${alert.city}, ${alert.street}</h3>
+                    <p class="text-gray-700"><strong>Description:</strong> ${alert.reportDescription}</p>
+                    <p class="text-gray-600"><strong>Reported by:</strong> ${alert.reportBy}</p>
+                    <div class="mt-2">
+                        <h4 class="font-semibold">Comments:</h4>
+                        ${filteredComments.map(comment =>
+                    `<div class="border-l-4 border-blue-500 pl-2 my-2">
+                                <p class="text-gray-600"><strong>${comment.reportBy || 'Anonymous'}:</strong> ${new Date(comment.reportMillis).toLocaleString()}: ${comment.text}</p>
+                            </div>`
+                ).join('')}
+                    </div>
+                `;
+                container.appendChild(reportElement);
+            }
+        });
+
+        if (!hasComments) {
+            container.innerHTML = `<p class="text-center text-gray-700">Nu există comentarii de afișat pentru ${cityName}.</p>`;
+        }
+    }
+</script>
+
+</body>
+</html>
