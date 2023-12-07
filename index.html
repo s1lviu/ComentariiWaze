@@ -11,7 +11,8 @@
 <body class="bg-gray-100 p-4">
 <div class="container mx-auto">
     <h1 class="text-2xl font-bold mb-4">Vezi comentarii de pe Waze din orașul:</h1>
-    <select id="city-selector" class="p-2 border border-gray-300 rounded">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+        <select id="city-selector" class="p-2 border border-gray-300 rounded w-full sm:w-auto">
         <option value="46.0664,23.5800">Alba Iulia</option>
         <option value="46.1866,21.3123">Arad</option>
         <option value="44.8600,24.8678">Pitești</option>
@@ -54,10 +55,11 @@
         <option value="46.6407,27.7276">Vaslui</option>
         <option value="45.0997,24.3693">Râmnicu Vâlcea</option>
         <option value="45.6960,27.1867">Focșani</option>
-    </select>
-    <button id="load-comments" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Încarcă comentariile
-    </button>
+        </select>
+        <button id="load-comments" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
+            Încarcă comentariile
+        </button>
+    </div>
     <div class="my-4">
         <label class="block mb-4 text-sm font-bold text-gray-700">Configurare offset-uri (implicit 0.05):</label>
         <p class="text-sm mb-2">Offset-urile sunt folosite pentru a ajusta aria de căutare în jurul coordonatelor
