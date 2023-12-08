@@ -125,51 +125,52 @@
         const container = document.getElementById('comments-container');
         container.innerHTML = ''; // Clear previous comments
 
-        alerts.forEach(alert => {
-            // Convert 'pubMillis' to a readable date format
-            const postedDate = new Date(alert.pubMillis).toLocaleString();
+        if (Array.isArray(alerts) && alerts.length > 0) {
+            alerts.forEach(alert => {
+                // Convert 'pubMillis' to a readable date format
+                const postedDate = new Date(alert.pubMillis).toLocaleString();
 
-            // Check if comments property exists and filter valid comments
-            const comments = alert.comments || [];
-            const filteredComments = comments.filter(comment => comment.text && comment.text.trim() !== '');
+                // Check if comments property exists and filter valid comments
+                const comments = alert.comments || [];
+                const filteredComments = comments.filter(comment => comment.text && comment.text.trim() !== '');
 
-            const reportElement = document.createElement('div');
-            reportElement.classList.add('p-4', 'bg-white', 'rounded', 'shadow', 'mb-4');
+                const reportElement = document.createElement('div');
+                reportElement.classList.add('p-4', 'bg-white', 'rounded', 'shadow', 'mb-4');
 
-            let commentsHtml = '';
+                let commentsHtml = '';
 
-            // Generate HTML for comments if there are any
-            if (filteredComments.length > 0) {
-                commentsHtml = `
+                // Generate HTML for comments if there are any
+                if (filteredComments.length > 0) {
+                    commentsHtml = `
                 <div class="mt-2">
                     <h4 class="font-semibold">Comments:</h4>
                     ${filteredComments.map(comment =>
-                    `<div class="border-l-4 border-blue-500 pl-2 my-2">
+                        `<div class="border-l-4 border-blue-500 pl-2 my-2">
                             <p class="text-gray-600"><strong>${comment.reportBy || 'Anonymous'}:</strong> ${new Date(comment.reportMillis).toLocaleString()}: ${comment.text}</p>
                         </div>`
-                ).join('')}
+                    ).join('')}
                 </div>
             `;
-            }
+                }
 
-            let reportDescriptionHtml = '';
+                let reportDescriptionHtml = '';
 
-            if (alert.reportDescription && alert.reportDescription.trim() !== '') {
-                reportDescriptionHtml = `<p class="text-gray-700"><strong>Description:</strong> ${alert.reportDescription}</p>`;
-            }
+                if (alert.reportDescription && alert.reportDescription.trim() !== '') {
+                    reportDescriptionHtml = `<p class="text-gray-700"><strong>Description:</strong> ${alert.reportDescription}</p>`;
+                }
 
-            // Set innerHTML for the report element, include comments section if available
-            reportElement.innerHTML = `
+                // Set innerHTML for the report element, include comments section if available
+                reportElement.innerHTML = `
             <h3 class="font-semibold text-lg"><a class="text-blue-500 hover:text-blue-700" target="_blank" href='https://www.waze.com/live-map/directions?to=ll.${encodeURIComponent(alert.location.y)},${encodeURIComponent(alert.location.x)}'>${alert.city || alert.nearBy}, ${alert.street || alert.city}</a></h3>
            ${reportDescriptionHtml}
             <p class="text-gray-600"><strong>Reported by:</strong> ${alert.reportBy}</p>
             <p class="text-gray-600"><strong>Posted on:</strong> ${postedDate}</p>
             ${commentsHtml}
         `;
-            container.appendChild(reportElement);
-        });
+                container.appendChild(reportElement);
+            });
 
-        if (alerts.length === 0) {
+        } else {
             container.innerHTML = `<p class="text-center text-gray-700">No reports to display for ${cityName}.</p>`;
         }
     }
