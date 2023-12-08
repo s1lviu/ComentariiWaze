@@ -160,7 +160,7 @@
 
             // Set innerHTML for the report element, include comments section if available
             reportElement.innerHTML = `
-            <h3 class="font-semibold text-lg">${alert.city || alert.nearBy}, ${alert.street}</h3>
+            <h3 class="font-semibold text-lg"><a class="text-blue-500 hover:text-blue-700" target="_blank" href='https://www.waze.com/live-map/directions?to=ll.${encodeURIComponent(alert.location.y)},${encodeURIComponent(alert.location.x)}'>${alert.city || alert.nearBy}, ${alert.street || alert.city}</a></h3>
            ${reportDescriptionHtml}
             <p class="text-gray-600"><strong>Reported by:</strong> ${alert.reportBy}</p>
             <p class="text-gray-600"><strong>Posted on:</strong> ${postedDate}</p>
