@@ -165,6 +165,7 @@
            ${reportDescriptionHtml}
             <p class="text-gray-600"><strong>Reported by:</strong> ${alert.reportBy || 'Anonymous'}</p>
             <p class="text-gray-600"><strong>Posted on:</strong> ${postedDate}</p>
+            <p class="text-gray-600">👍 ${alert.nThumbsUp}</p>
             ${commentsHtml}
         `;
                 container.appendChild(reportElement);
